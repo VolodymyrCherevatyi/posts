@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import Services from "../../services/services";
 
 import Post from "../post/Post";
 import AddPost from "../add-post/AddPost";
 import CommentedPost from "../commented-post/CommentedPost";
-
+import ModalWindow from "../modal/Modal";
 
 const Posts = () => {
 	const [posts, setPosts] = useState([]);
-	
+	const [postId, setPostId] = useState(null);
+	const [showModal, setShowModal] = useState("");
 	const {getResourse} = Services();
 
 	useEffect(() => {
+		onPostLoading();
+	}, []);
+
+	const onPostLoading = () => {
 		getResourse("https://simple-blog-api.crew.red/posts")
 			.then(result => {
 				setPosts(result);
 			});
-	}, []);
+	};
 
 	const displayPosts = () => {
 		const postsCount = posts.length;
@@ -29,7 +34,10 @@ const Posts = () => {
 				title={item.title} 
 				id={item.id} 
 				key={item.id} 
-				onDelete={deletePost} 
+				// onDelete={deletePost} 
+				onOpen={openPost}
+				onModalShow={onOpenModal}
+				getId={getId}
 			/>
 		));
 	};
@@ -39,13 +47,30 @@ const Posts = () => {
 		newPosts.push(newPost);
 		setPosts(newPosts);
 	};
-	
+
 	const deletePost = (id) => {
 		let allPosts = posts;
 		allPosts = allPosts.filter(item=>{return item.id != id;});
 		getResourse(`https://simple-blog-api.crew.red/posts/${id}`,"DELETE")
 			.then(console.log('Ok'));
 		setPosts(allPosts);
+		setShowModal("");
+	};
+
+	const onOpenModal = () => {
+		setShowModal("show");
+	};
+
+	const onCloseModal = () => {
+		setShowModal("");
+	};
+
+	const openPost = (id) => {
+		setPostId(id);
+	};
+	
+	const getId = (id) => {
+		setPostId(id);
 	};
 
 	return (
@@ -55,14 +80,21 @@ const Posts = () => {
 					
 				<Route path="/posts" element={<div className="posts">{displayPosts()}</div>}/>
 
-				{/* <Route path="/posts/:id" element={}/> */}
+				<Route 
+					path="/posts/:id" 
+					element={
+						<CommentedPost 
+							onDelete={deletePost} 
+							showModal={showModal} 
+							onClose={onCloseModal}
+							onModalShow={onOpenModal}
+						/>}
+				/>
 				
 				<Route path="/" element={null}/>	
 			</Routes>
-			{console.log('render')}
-			{/* <CommentedPost/> */}
-			{/* <AddPost onSuccess={addNewPost} />
-			<div className="posts">{displayPosts()}</div> */}
+
+			<ModalWindow showModal={showModal} onDelete={deletePost} onClose={onCloseModal} postId={postId}/>
 		</div>
 	);
 };

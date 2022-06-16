@@ -1,8 +1,9 @@
 import { Card, Button } from "react-bootstrap";
+import {Link} from "react-router-dom";
 import "./Post.scss";
 
 const Post = (props) => {
-	const {id, title, post, onDelete, onOpen} = props;
+	const {id, title, post, onDelete, onOpen, onModalShow, getId} = props;
 	
 	const deletePost = (e) => {
 		onDelete(e.target.getAttribute(['data-post-id']));
@@ -10,6 +11,11 @@ const Post = (props) => {
 
 	const openPost = (e) => {
 		onOpen(e.target.getAttribute(['data-post-id']));
+	};
+
+	const get = (e) => {
+		getId(e.target.getAttribute(['data-post-id']));
+		onModalShow();
 	};
 
 	return (
@@ -20,9 +26,11 @@ const Post = (props) => {
 					<Card.Text>
 						{post}
 					</Card.Text>
-					<Button variant="primary">Open</Button>
+					<Link to={`/posts/${id}`}>
+						<Button variant="primary" onClick={openPost} data-post-id={id}>Open</Button>
+					</Link>
 					<Button variant="primary">Change</Button>
-					<Button variant="primary" onClick={deletePost} data-post-id={id}>Delete</Button>
+					<Button variant="primary" onClick={get} data-post-id={id}>Delete</Button>
 				</Card.Body>
 			</Card>
 		</div>
