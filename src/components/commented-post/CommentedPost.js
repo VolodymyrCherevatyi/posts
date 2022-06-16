@@ -9,23 +9,25 @@ import ModalWindow from "../modal/Modal";
 const CommentedPost = (props) => {
 	const {id} = useParams();
 	const {getResourse} = Services();
-	const [posts, setPosts] = useState([]);
+	const [post, setPost] = useState([]);
 
 	const {onDelete, onClose, showModal, onModalShow} = props;
 
 	useEffect(() => {
 		getResourse(`https://simple-blog-api.crew.red/posts/${id}?_embed=comments`)
 			.then(result => {
-				setPosts(result);
+				console.log(result);
+				setPost(result);
 			});
 	}, []);
 
 	const getComments = () => {
-		if(posts.comments){
-			const post = posts.comments.map(item => {
+		if(post.comments){
+			console.log(post.comments);
+			const comments = post.comments.map(item => {
 				return (<ListGroupItem key={item.id}>{item.body}</ListGroupItem>);
 			});
-			return post;
+			return comments;
 		}else {
 			return null;
 		};
@@ -35,9 +37,9 @@ const CommentedPost = (props) => {
 		<div className="post" >
 			<Card >
 				<Card.Body>
-					<Card.Title as="h2">{posts.title}</Card.Title>
+					<Card.Title as="h2">{post.title}</Card.Title>
 					<Card.Text as="h3">
-						{posts.body}
+						{post.body}
 					</Card.Text>
 				</Card.Body>
 				<ListGroup className="list-group-flush">
@@ -45,7 +47,7 @@ const CommentedPost = (props) => {
 				</ListGroup>
 				<Card.Body>
 					<Link to={"/posts"} className="card-link">Back</Link>
-					<Card.Link href="#">Change</Card.Link>
+					<Link to={`/posts/${id}/change`} className="card-link">Change</Link>
 					<Card.Link href="#" onClick={onModalShow}>Delete</Card.Link>
 				</Card.Body>
 			</Card>

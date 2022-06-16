@@ -29,7 +29,9 @@ const Post = (props) => {
 					<Link to={`/posts/${id}`}>
 						<Button variant="primary" onClick={openPost} data-post-id={id}>Open</Button>
 					</Link>
-					<Button variant="primary">Change</Button>
+					<Link to={`/posts/${id}/change`}>
+						<Button variant="primary">Change</Button>
+					</Link>
 					<Button variant="primary" onClick={get} data-post-id={id}>Delete</Button>
 				</Card.Body>
 			</Card>

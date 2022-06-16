@@ -6,6 +6,7 @@ import Post from "../post/Post";
 import AddPost from "../add-post/AddPost";
 import CommentedPost from "../commented-post/CommentedPost";
 import ModalWindow from "../modal/Modal";
+import ChangePost from "../change-post/ChangePost";
 
 const Posts = () => {
 	const [posts, setPosts] = useState([]);
@@ -73,6 +74,18 @@ const Posts = () => {
 		setPostId(id);
 	};
 
+	const onChangePost = (changedPost) => {
+		let newArray = [...posts];
+		newArray = newArray.map(item=>{ 
+			if(changedPost.id != item.id) {
+				return item;
+			} else {
+				return changedPost;
+			}
+		});
+		setPosts(newArray);
+	};
+
 	return (
 		<div>
 			<Routes>
@@ -89,6 +102,9 @@ const Posts = () => {
 							onClose={onCloseModal}
 							onModalShow={onOpenModal}
 						/>}
+				/>
+
+				<Route path="/posts/:id/change" element={<ChangePost posts={posts} onSuccess={onChangePost}/>}
 				/>
 				
 				<Route path="/" element={null}/>	
