@@ -2,6 +2,8 @@ import { BrowserRouter } from "react-router-dom";
 import Header from "../header/Header";
 import Posts from "../posts/Posts";
 
+import "./app.scss";
+
 function App() {
 	return (
 		<BrowserRouter>

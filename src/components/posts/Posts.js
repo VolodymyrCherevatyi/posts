@@ -7,6 +7,7 @@ import AddPost from "../add-post/AddPost";
 import CommentedPost from "../commented-post/CommentedPost";
 import ModalWindow from "../modal/Modal";
 import ChangePost from "../change-post/ChangePost";
+import FirstPage from "../first-page/FirstPage";
 
 const Posts = () => {
 	const [posts, setPosts] = useState([]);
@@ -107,7 +108,7 @@ const Posts = () => {
 				<Route path="/posts/:id/change" element={<ChangePost posts={posts} onSuccess={onChangePost}/>}
 				/>
 				
-				<Route path="/" element={null}/>	
+				<Route path="/" element={<FirstPage/>}/>	
 			</Routes>
 
 			<ModalWindow showModal={showModal} onDelete={deletePost} onClose={onCloseModal} postId={postId}/>
