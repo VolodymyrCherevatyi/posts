@@ -66,7 +66,7 @@ const AddPost = (props) => {
 					/>
 				</FloatingLabel>
 				<Button 
-					variant="outline-primary" 
+					variant="primary" 
 					className="add-post-btn" 
 					onClick={onAddPost} 
 					disabled={isDisabled}

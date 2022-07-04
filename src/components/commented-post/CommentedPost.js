@@ -16,14 +16,12 @@ const CommentedPost = (props) => {
 	useEffect(() => {
 		getResourse(`https://simple-blog-api.crew.red/posts/${id}?_embed=comments`)
 			.then(result => {
-				console.log(result);
 				setPost(result);
 			});
 	}, []);
 
 	const getComments = () => {
 		if(post.comments){
-			console.log(post.comments);
 			const comments = post.comments.map(item => {
 				return (<ListGroupItem key={item.id}>{item.body}</ListGroupItem>);
 			});

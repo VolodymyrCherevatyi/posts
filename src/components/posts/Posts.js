@@ -8,27 +8,35 @@ import CommentedPost from "../commented-post/CommentedPost";
 import ModalWindow from "../modal/Modal";
 import ChangePost from "../change-post/ChangePost";
 import FirstPage from "../first-page/FirstPage";
+import ErrorMessage from '../error/ErrorMessage';
+
 
 const Posts = () => {
 	const [posts, setPosts] = useState([]);
 	const [postId, setPostId] = useState(null);
 	const [showModal, setShowModal] = useState("");
+	const [error, setError] = useState(false);
 	const {getResourse} = Services();
 
 	useEffect(() => {
 		onPostLoading();
+		setError(false);
 	}, []);
 
 	const onPostLoading = () => {
 		getResourse("https://simple-blog-api.crew.red/posts")
 			.then(result => {
 				setPosts(result);
+			})
+			.catch(e => {
+				setError(true);
 			});
 	};
 
 	const displayPosts = () => {
 		const postsCount = posts.length;
 		const reversPosts = [];
+		
 		posts.map((item, i) => (reversPosts[postsCount - i - 1] = item));
 		return reversPosts.map((item) => (
 			<Post 
@@ -48,6 +56,7 @@ const Posts = () => {
 		const newPosts = posts;
 		newPosts.push(newPost);
 		setPosts(newPosts);
+		onPostLoading();
 	};
 
 	const deletePost = (id) => {
@@ -86,13 +95,13 @@ const Posts = () => {
 		});
 		setPosts(newArray);
 	};
-
+	
 	return (
 		<div>
 			<Routes>
 				<Route path="/add-post" element={<AddPost onSuccess={addNewPost} />}/>
 					
-				<Route path="/posts" element={<div className="posts">{displayPosts()}</div>}/>
+				<Route path="/posts" element={<div className="posts">{!error? displayPosts():<ErrorMessage/>}</div>}/>
 
 				<Route 
 					path="/posts/:id" 
@@ -112,6 +121,7 @@ const Posts = () => {
 			</Routes>
 
 			<ModalWindow showModal={showModal} onDelete={deletePost} onClose={onCloseModal} postId={postId}/>
+
 		</div>
 	);
 };

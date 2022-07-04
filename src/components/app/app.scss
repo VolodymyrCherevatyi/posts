@@ -1,3 +1,5 @@
 .App {
-	background: url("../../../public/startup-desk.jpg") no-repeat 50%/100%;
+	background-image: url("../../../public/startup-desk.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
