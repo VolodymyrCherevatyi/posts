@@ -1,5 +1,6 @@
 const Services = () => {
 	const getResourse = (url, method="GET", data=null) => {
+		
 		try{
 			const request = fetch(url, {
 				method: method,

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Services from "../../services/services";
+import { RingLoader } from "react-spinners";
 
 import Post from "../post/Post";
 import AddPost from "../add-post/AddPost";
@@ -16,6 +17,7 @@ const Posts = () => {
 	const [postId, setPostId] = useState(null);
 	const [showModal, setShowModal] = useState("");
 	const [error, setError] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const {getResourse} = Services();
 
 	useEffect(() => {
@@ -27,9 +29,11 @@ const Posts = () => {
 		getResourse("https://simple-blog-api.crew.red/posts")
 			.then(result => {
 				setPosts(result);
+				setLoading(false);
 			})
 			.catch(e => {
 				setError(true);
+				setLoading(false);
 			});
 	};
 
@@ -95,13 +99,16 @@ const Posts = () => {
 		});
 		setPosts(newArray);
 	};
-	
+
+	const errorMessage = error ? <ErrorMessage/> : null;
+	const loadingPosts = loading ? <RingLoader size={300} color="#2337e9"cssOverride={{display: "block", margin: "0 auto"}}/> : null;
+	const postItems = !errorMessage && !loadingPosts ? displayPosts() : null;
 	return (
 		<div>
 			<Routes>
 				<Route path="/add-post" element={<AddPost onSuccess={addNewPost} />}/>
 					
-				<Route path="/posts" element={<div className="posts">{!error? displayPosts():<ErrorMessage/>}</div>}/>
+				<Route path="/posts" element={<div className="posts">{error ? errorMessage : loading ? loadingPosts: postItems}</div>}/>
 
 				<Route 
 					path="/posts/:id" 
